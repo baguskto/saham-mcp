@@ -37,11 +37,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/baguskto/saham.git"
+    "url": "git+https://github.com/baguskto/saham-mcp.git"
   },
-  "homepage": "https://github.com/baguskto/saham#readme",
+  "homepage": "https://github.com/baguskto/saham-mcp#readme",
   "bugs": {
-    "url": "https://github.com/baguskto/saham/issues"
+    "url": "https://github.com/baguskto/saham-mcp/issues"
   },
   "engines": {
     "node": ">=18.0.0"

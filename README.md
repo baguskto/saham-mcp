@@ -5,30 +5,27 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.3.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-MCP Server untuk mengakses data Bursa Efek Indonesia (IDX) dengan dukungan **data historis lengkap dari tahun 2019**. Dibangun dengan Node.js dan TypeScript, server ini memungkinkan AI assistant untuk mengambil informasi saham real-time, data historis komprehensif, analisis teknikal, dan performa sektor.
+MCP Server untuk mengakses data Bursa Efek Indonesia (IDX) dengan dukungan **data historis lengkap dari tahun 2019**. Dibangun dengan **TypeScript** dan **@modelcontextprotocol/sdk**, server ini memungkinkan AI assistant untuk mengambil informasi saham real-time, data historis komprehensif, analisis teknikal, dan performa sektor.
 
-## 🚀 New in v1.0.5
+## v1.0.5 Features
 
-- ✅ **Data Historis Lengkap**: Akses data saham dari **2019 hingga sekarang** (6+ tahun)
-- ✅ **Dataset GitHub Terintegrasi**: Data dari [Dataset-Saham-IDX](https://github.com/wildangunawan/Dataset-Saham-IDX)
-- ✅ **Periode Extended**: Dukungan periode 2y dan 5y untuk analisis jangka panjang
-- ✅ **958 Saham IDX**: Mencakup seluruh saham yang terdaftar di IDX
-- ✅ **JSON-RPC Compliant**: Protokol MCP yang bersih tanpa error parsing
-- ✅ **Robust Error Handling**: Penanganan error yang lebih baik untuk stabilitas
+- ✅ Data historis 2019-2025 (958 saham)
+- ✅ GitHub Dataset-Saham-IDX terintegrasi
+- ✅ Periode 2y dan 5y
+- ✅ JSON-RPC compliant
+- ✅ Error handling dengan fallback
 
 ## Features
 
-- 🏢 **Market Overview**: IHSG index, trading volume, top gainers/losers
-- 📈 **Stock Information**: Real-time prices, volume, market cap, ratios
-- 📊 **Historical Data**: Data OHLCV dari **2019-2025** dengan analisis teknikal
-- 🏭 **Sector Performance**: Analisis performa sektor IDX
-- 🔍 **Stock Search**: Cari saham berdasarkan ticker atau nama perusahaan
-- 📈 **Stock Analysis**: Analisis teknikal lengkap dengan 15+ indikator
-- ⚖️ **Stock Comparison**: Perbandingan performa multi-saham
-- 📚 **Dataset Management**: Akses ke dataset historis komprehensif (958 saham)
-- ⚡ **High Performance**: In-memory caching dengan TTL yang dapat dikonfigurasi
-- 🔧 **Multiple Data Sources**: GitHub Dataset (historis) + Yahoo Finance (real-time) + Web scraping (fallback)
-- 🛡️ **Type Safety**: Implementasi TypeScript penuh dengan validasi Zod
+- Market overview (IHSG, volume, top movers)
+- Stock info (price, ratios, market cap)
+- Historical data (2019-2025, OHLCV)
+- Sector performance
+- Stock search dan comparison
+- Technical analysis
+- 958 saham IDX
+- Multi-source dengan fallback
+- TypeScript + Zod validation
 
 ## Quick Start
 
@@ -40,14 +37,13 @@ Cara termudah menggunakan Baguskto Saham adalah dengan `npx`:
 # Jalankan langsung dengan npx (otomatis install dan run)
 npx @baguskto/saham@latest
 
-# Test server
-npx @baguskto/saham test
+# Command line options (implemented)
+npx @baguskto/saham --help        # Show help
+npx @baguskto/saham --version     # Show version
 
-# Lihat statistik
-npx @baguskto/saham stats
-
-# Bersihkan cache
-npx @baguskto/saham clear-cache
+# Environment variables
+IDX_MCP_DEBUG=true npx @baguskto/saham@latest  # Debug mode
+IDX_MCP_LOG_LEVEL=error npx @baguskto/saham@latest  # MCP mode
 ```
 
 ### Instalasi sebagai Dependency
@@ -85,7 +81,7 @@ npm test
 
 ## MCP Tools
 
-The server provides 9 comprehensive MCP tools:
+The server provides **9 comprehensive MCP tools** (fully implemented):
 
 ### 1. get_market_overview
 
@@ -311,26 +307,30 @@ Tambahkan ke file konfigurasi Claude Desktop:
 }
 ```
 
-## Data Sources
+## Data Sources (Implemented)
 
-### Primary Sources (Priority Order)
+### Data Source Manager with Priority-based Fallback
 
-1. **GitHub Dataset-Saham-IDX** (Historical Data)
+The server uses a **DataSourceManager** that coordinates multiple data sources:
+
+1. **GitHubDatasetSource** (Historical Data)
    - Source: [wildangunawan/Dataset-Saham-IDX](https://github.com/wildangunawan/Dataset-Saham-IDX)
+   - Implementation: `src/data-sources/github-dataset.ts`
    - Coverage: 2019-2025 (6+ years)
    - Stocks: 958 IDX stocks
    - Priority: HIGH
    - Cache TTL: 24 hours
 
-2. **Yahoo Finance** (Real-time Data)
-   - Real-time stock quotes
-   - Live IHSG index data
-   - Current market status
+2. **YahooFinanceSource** (Real-time Data)
+   - Implementation: `src/data-sources/yahoo-finance.ts`
+   - Library: `yahoo-finance2`
+   - Real-time stock quotes and IHSG index
    - Priority: HIGH
    - Cache TTL: 5 minutes
 
-3. **Web Scraping** (Fallback)
-   - Market overview from financial websites
+3. **WebScrapingSource** (Fallback)
+   - Implementation: `src/data-sources/web-scraper.ts`
+   - Library: `cheerio` + `axios`
    - Fallback when primary sources fail
    - Priority: MEDIUM
 
@@ -369,25 +369,34 @@ Tambahkan ke file konfigurasi Claude Desktop:
 
 ## Development
 
-### Project Structure
+### Project Structure (Current Implementation)
 
 ```
 src/
-├── types/              # TypeScript type definitions
-├── config/             # Configuration management
-├── utils/              # Utilities (logging, GitHub API)
-├── cache/              # Caching layer
-├── data-sources/       # Data source implementations
-│   ├── github-dataset.ts   # GitHub historical data
-│   ├── yahoo-finance.ts    # Yahoo Finance integration
-│   └── web-scraper.ts      # Web scraping fallback
-├── services/           # Business logic services
-│   ├── historical-data-service.ts  # Historical data management
-│   ├── csv-parser.ts              # CSV parsing with column mapping
-│   └── technical-analysis.ts      # Technical analysis
-├── server/             # MCP server implementation
-├── cli.ts              # CLI entry point
-└── index.ts            # Main exports
+├── types/                    # TypeScript type definitions
+│   └── index.ts             # All type exports
+├── config/                   # Configuration management
+│   └── index.ts             # AppConfig with Zod validation
+├── utils/                    # Utilities and helpers
+│   ├── logger.ts            # Winston logging setup
+│   └── github-api.ts        # GitHub API service
+├── cache/                    # Caching layer
+│   └── index.ts             # Memory cache with TTL
+├── data-sources/             # Data source implementations
+│   ├── base.ts              # DataSource and DataSourceManager
+│   ├── github-dataset.ts    # GitHub Dataset-Saham-IDX integration
+│   ├── yahoo-finance.ts     # Yahoo Finance integration
+│   ├── web-scraper.ts       # Web scraping fallback
+│   └── index.ts             # Data source management
+├── services/                 # Business logic services
+│   ├── historical-data-service.ts  # Historical data with caching
+│   ├── csv-parser.ts               # Robust CSV parsing
+│   └── technical-analysis.ts       # Technical indicators
+├── server/                   # MCP server implementation
+│   └── index.ts             # IDXMCPServer with 9 tools
+├── cli.ts                    # CLI with Commander.js
+├── mcp-entry.ts             # MCP stdio entry point
+└── index.ts                 # Main exports
 ```
 
 ## Troubleshooting
@@ -422,13 +431,14 @@ IDX_MCP_DEBUG=true IDX_MCP_LOG_LEVEL=debug npx @baguskto/saham
 
 ## Version History
 
-### v1.0.5 (Latest)
-- ✅ **Complete GitHub Dataset Integration**: Full access to 2019-2025 historical data
-- ✅ **Fixed Column Mapping Bug**: Resolved CSV parsing issues for historical data
-- ✅ **Extended Period Support**: Added 2y and 5y analysis periods
-- ✅ **JSON-RPC Compliance**: Clean MCP protocol communication
-- ✅ **Enhanced Error Handling**: Robust error handling and fallback mechanisms
-- ✅ **958 Stock Coverage**: Complete IDX stock universe support
+### v1.0.5 (Latest - Production Ready)
+- ✅ **Complete GitHub Dataset Integration**: Full access to 2019-2025 historical data via GitHubDatasetSource
+- ✅ **Fixed Column Mapping Bug**: Resolved CSV parsing issues in csv-parser.ts (date column priority)
+- ✅ **Extended Period Support**: Added 2y and 5y analysis periods to all tools
+- ✅ **JSON-RPC Compliance**: Clean MCP protocol via mcp-entry.ts with stdout interception
+- ✅ **Enhanced Error Handling**: Comprehensive error handling in DataSourceManager
+- ✅ **958 Stock Coverage**: Complete IDX stock universe from Dataset-Saham-IDX repository
+- ✅ **TypeScript Implementation**: Full TypeScript with Zod validation and type safety
 
 ### Previous Versions
 - v1.0.4: Basic MCP implementation with Yahoo Finance

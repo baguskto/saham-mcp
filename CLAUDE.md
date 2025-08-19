@@ -1,139 +1,114 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with this repository.
 
 ## Project Overview
 
-This is the **IDX MCP Server** - an MCP (Model Context Protocol) server providing Indonesian stock market data to AI assistants like Claude, Cursor, and ChatGPT. The project is currently in the planning/setup phase with only a Product Requirements Document available.
+This is **Baguskto Saham** - a production-ready MCP (Model Context Protocol) server providing Indonesian stock market data to AI assistants. Built with TypeScript and published as `@baguskto/saham` on npm.
 
-## Project Architecture
+## Architecture
 
-Based on the PRD specifications, this will be:
+**Language**: TypeScript/Node.js 18+  
+**Framework**: @modelcontextprotocol/sdk  
+**Protocol**: MCP JSON-RPC 2.0 over stdio  
+**Package**: `@baguskto/saham`
 
-**Language**: Python 3.10+  
-**Framework**: FastMCP  
-**Protocol**: MCP (Model Context Protocol) using JSON-RPC 2.0  
-**Transport**: stdio (local) / HTTP+SSE (future)
+### Components
+- **MCP Server**: 9 tools using @modelcontextprotocol/sdk
+- **Data Sources**: GitHub Dataset (historical), Yahoo Finance (live), Web scraping (fallback)
+- **Cache**: In-memory with TTL
+- **Parser**: Robust CSV parsing for Indonesian stock data
 
-### Core Components (Planned)
-- **MCP Server**: Main server implementing MCP protocol
-- **Data Aggregator**: Collects data from multiple sources
-- **Cache Layer**: Redis/SQLite for performance
-- **Data Sources**: Yahoo Finance API, Google Finance, web scrapers
+### Data Sources
+| Source | Data Type | Priority |
+|--------|-----------|----------|
+| GitHub Dataset-Saham-IDX | Historical OHLCV (2019-2025) | HIGH |
+| Yahoo Finance | Live quotes, IHSG | HIGH |
+| Web Scraping | Fallback | MEDIUM |
 
-### Data Sources Strategy
-| Source | Data Type | Update Frequency | Priority |
-|--------|-----------|------------------|----------|
-| Yahoo Finance | Dual-listed stocks | Real-time | HIGH |
-| Google Finance | Basic prices | 15 min delay | HIGH |
-| IDX Website | Market overview | Daily | MEDIUM |
-| Investing.com | Historical data | Daily | MEDIUM |
-| Manual CSV | Stock list, sectors | Weekly | LOW |
+## MCP Tools
 
-## Core Features
+**9 comprehensive tools**:
 
-### Basic Market Data (Live API)
-1. **Market Overview** (`get_market_overview()`)
-   - IHSG current value & change
-   - Trading volume & value
-   - Top 5 gainers/losers
-   - Foreign flow summary
+1. `get_market_overview()` - IHSG index, volume, top movers
+2. `get_stock_info(ticker)` - Stock details, price, ratios
+3. `get_historical_data(ticker, period)` - OHLCV data (2019-2025)
+4. `get_sector_performance()` - All IDX sectors
+5. `search_stocks(query)` - Find stocks by name/ticker
+6. `get_stock_analysis(ticker, period)` - Technical analysis
+7. `compare_stocks(tickers[], period)` - Multi-stock comparison
+8. `get_available_stocks()` - List 958 available stocks
+9. `get_dataset_info()` - Dataset metadata
 
-2. **Stock Information** (`get_stock_info(ticker)`)
-   - Current price & change
-   - Day's range, volume, market cap
-   - 52-week high/low, P/E ratio
+## Development
 
-3. **Sector Performance** (`get_sector_performance()`)
-   - All IDX sectors performance
-   - Best/worst performing sectors
+### Requirements
+- Node.js 18+
+- TypeScript 5.3+
 
-4. **Search Stocks** (`search_stocks(query)`)
-   - Find stocks by company name or partial ticker
+### Key Dependencies
+- `@modelcontextprotocol/sdk` - MCP protocol
+- `yahoo-finance2` - Live data
+- `axios` - HTTP client
+- `cheerio` - Web scraping
+- `winston` - Logging
+- `zod` - Validation
 
-### Enhanced Historical Data & Analysis (Dataset-Saham-IDX Integration)
-5. **Historical Data** (`get_historical_data(ticker, period)`)
-   - Comprehensive OHLCV data from GitHub repository
-   - Periods: 1m, 3m, 6m, 1y, 2y, 5y
-   - Automatic fallback to live API if historical data unavailable
+## Performance
 
-6. **Stock Analysis** (`get_stock_analysis(ticker, period)`)
-   - Complete technical analysis with 15+ indicators
-   - SMA/EMA (20, 50, 200), RSI, MACD, Bollinger Bands
-   - Support/resistance levels, volatility analysis
-   - Trading recommendations with confidence scores
+- Response time: <2 seconds
+- Cache: Market (1 min), Stock (5 min), Historical (24 hours)
+- 958 stocks supported
+- Error handling with fallback sources
 
-7. **Stock Comparison** (`compare_stocks(tickers[], period)`)
-   - Multi-stock performance comparison
-   - Returns, volatility, volume analysis
-   - Best/worst performer identification
+## Status
 
-8. **Dataset Management** 
-   - `get_available_stocks()` - List all available tickers
-   - `get_dataset_info()` - Repository info and cache statistics
+✅ **v1.0.5 Production Ready**  
+✅ 9 MCP tools implemented  
+✅ 958 stocks, 2019-2025 data  
+✅ Published to npm  
+✅ JSON-RPC compliant
 
-## Development Setup
+## Usage Examples
 
-Since this is a new project, you'll need to:
-
-1. Set up Python 3.10+ environment
-2. Install dependencies as listed in PRD:
-   - `yfinance`: Dual-listed stocks
-   - `beautifulsoup4`: Web scraping
-   - `pandas`: Data processing
-   - `redis`: Caching
-   - `httpx`: Async HTTP client
-   - `pydantic`: Data validation
-   - `fastmcp`: MCP framework
-
-## Performance Requirements
-
-- Response time: <2 seconds for all queries
-- Cache TTL: Prices (5 min), Market overview (1 min), Historical (24 hours)
-- Support 10+ concurrent requests
-- Error rate: <1%
-
-## Data Compliance
-
-- Respect robots.txt for web scraping
-- Rate limiting to prevent API abuse
-- Data source attribution required
-- No storage of user credentials
-- Clear disclaimers about data accuracy
-
-## Target Users
-
-- **Retail Investors**: Quick stock checks in AI assistants
-- **Developers**: Integration of IDX data into AI workflows
-- **Financial Analysts**: Quick market insights during research
-
-## Development Phases
-
-**Phase 1 (Week 1-2)**: Core MCP server, market overview, stock lookup, basic caching  
-**Phase 2 (Week 3-4)**: Historical data, foreign flow analysis, stock search  
-**Phase 3 (Week 5-6)**: Documentation, examples, performance optimization
-
-## Example Usage Patterns
-
-```python
-# Market overview
+```text
 "How's IDX doing today?"
-
-# Single stock analysis  
-"Analyze BBCA"
-"What's TLKM price?"
-
-# Sector comparison
-"Compare banking vs mining sector this week"
-
-# Historical data
-"Show BBRI price trend last month"
+"Analyze BBCA with 2-year technical analysis"
+"Show BBRI 5-year price history"
+"Compare BBCA, BBRI, BMRI over 2 years"
+"Search for mining companies"
+"How many stocks are available?"
 ```
 
-## Important Notes
+## Installation
 
-- This is a defensive security project - only public market data access
-- No trading functionality or personal portfolio tracking
-- Data has 15-minute delay (acceptable for MVP)
-- Must handle graceful degradation when data sources fail
-- Support for both English and Indonesian responses
+```bash
+# Run with npx
+npx @baguskto/saham@latest
+
+# Development
+git clone https://github.com/baguskto/saham-mcp.git
+cd saham-mcp && npm install && npm run build
+```
+
+## Claude Desktop Setup
+
+```json
+{
+  "mcpServers": {
+    "baguskto-saham": {
+      "command": "npx",
+      "args": ["@baguskto/saham@latest"],
+      "env": { "IDX_MCP_LOG_LEVEL": "error" }
+    }
+  }
+}
+```
+
+## Notes
+
+- Public market data only
+- Historical: 2019-2025 (958 stocks)
+- Live: 15-min delay
+- Multi-source fallback
+- English/Indonesian support
