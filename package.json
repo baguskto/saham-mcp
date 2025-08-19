@@ -4,7 +4,7 @@
   "description": "MCP Server untuk data saham Indonesia (IDX) - Implementasi Node.js/TypeScript",
   "main": "dist/mcp-entry.js",
   "bin": {
-    "baguskto-saham": "./dist/cli.js"
+    "baguskto-saham": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -37,7 +37,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/baguskto/saham.git"
+    "url": "git+https://github.com/baguskto/saham.git"
   },
   "homepage": "https://github.com/baguskto/saham#readme",
   "bugs": {
