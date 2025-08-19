@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "baguskto-saham": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@baguskto/saham@1.0.4",
+        "--dangerously-skip-permissions"
+      ]
+    }
+  }
+}

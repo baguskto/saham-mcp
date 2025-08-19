@@ -1,0 +1,31 @@
+ticker,name,sector,market_cap_billion
+BBCA,Bank Central Asia Tbk PT,Banking,1081.5
+BBRI,Bank Rakyat Indonesia Tbk PT,Banking,876.2
+BMRI,Bank Mandiri Tbk PT,Banking,654.3
+TLKM,Telkom Indonesia Tbk PT,Telecommunications,432.1
+ASII,Astra International Tbk PT,Automotive,287.9
+UNVR,Unilever Indonesia Tbk PT,Consumer Goods,256.8
+INDF,Indofood Sukses Makmur Tbk PT,Food & Beverages,189.4
+ADRO,Adaro Energy Tbk PT,Mining,156.7
+PTBA,Tambang Batubara Bukit Asam Tbk PT,Mining,134.2
+ICBP,Indofood CBP Sukses Makmur Tbk PT,Food & Beverages,123.9
+BRIS,Bank Syariah Indonesia Tbk PT,Banking,98.7
+PGAS,Perusahaan Gas Negara Tbk PT,Energy,89.4
+EXCL,XL Axiata Tbk PT,Telecommunications,87.2
+SMGR,Semen Indonesia Tbk PT,Construction,76.8
+INTP,Indocement Tunggal Prakarsa Tbk PT,Construction,65.4
+KLBF,Kalbe Farma Tbk PT,Healthcare,54.3
+ANTM,Aneka Tambang Tbk PT,Mining,48.9
+SIDO,Industri Jamu dan Farmasi Sido Muncul Tbk PT,Healthcare,43.2
+GGRM,Gudang Garam Tbk PT,Consumer Goods,41.7
+WSKT,Waskita Karya Tbk PT,Construction,38.9
+WIKA,Wijaya Karya Tbk PT,Construction,34.6
+JSMR,Jasa Marga Tbk PT,Infrastructure,32.1
+BDMN,Bank Danamon Indonesia Tbk PT,Banking,29.8
+CPIN,Charoen Pokphand Indonesia Tbk PT,Agriculture,28.4
+TPIA,Chandra Asri Petrochemical Tbk PT,Chemicals,26.9
+TOWR,Sarana Menara Nusantara Tbk PT,Telecommunications,25.7
+BBTN,Bank Tabungan Negara Tbk PT,Banking,24.3
+HMSP,HM Sampoerna Tbk PT,Consumer Goods,23.8
+MNCN,Media Nusantara Citra Tbk PT,Media,22.6
+SCMA,Surya Citra Media Tbk PT,Media,21.4

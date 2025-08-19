@@ -1,0 +1,10 @@
+{
+  "ticker": "BMRI",
+  "lastUpdated": "2025-08-19T02:51:23.707Z",
+  "dataPoints": 1241,
+  "dateRange": {
+    "start": "2019-07-28T17:00:00.000Z",
+    "end": "2025-02-20T17:00:00.000Z"
+  },
+  "fileSize": 304428
+}

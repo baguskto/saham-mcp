@@ -1,0 +1,59 @@
+# Source files
+src/
+*.ts
+tsconfig.json
+
+# Development files
+.env
+.env.*
+*.log
+logs/
+
+# Test files
+test/
+tests/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temp files
+tmp/
+temp/
+*.tmp
+
+# Git
+.git/
+.gitignore
+
+# Documentation (keep only essential ones)
+docs/prd.md
+IMPLEMENTATION_SUMMARY.md
+HISTORICAL_DATA_INTEGRATION.md
+CLAUDE.md
+
+# Development scripts
+scripts/
+tools/
+
+# Node modules (already handled by default)
+node_modules/
+
+# Build artifacts
+.nyc_output/
+coverage/
+lib-cov/
+
+# Cache
+.npm
+.cache/
