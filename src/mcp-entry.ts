@@ -7,20 +7,51 @@
 // Set log level early to avoid stdout pollution
 process.env['IDX_MCP_LOG_LEVEL'] = 'error';
 
-// Suppress Yahoo Finance stdout noise that interferes with MCP protocol
+// Completely suppress all stdout output to ensure clean JSON-RPC communication
+
+// Override all console methods that write to stdout
 console.log = (...args: any[]) => {
-  const message = args.join(' ');
-  // Suppress Yahoo Finance notifications that interfere with MCP JSON protocol
-  if (message.includes('Please consider completing the survey') ||
-      message.includes('Fetching crumb and cookies') ||
-      message.includes('Success. Cookie expires') ||
-      message.includes('fetch https://query') ||
-      message.includes('New crumb:') ||
-      message.includes('We expected a redirect')) {
-    return; // Suppress these messages
+  // In MCP mode, redirect all log output to stderr to avoid corrupting JSON-RPC
+  if (process.env['IDX_MCP_LOG_LEVEL'] === 'error') {
+    // Don't output anything to avoid JSON pollution
+    return;
   }
-  // Allow other messages to go to stderr instead of stdout
-  console.error(...args);
+  // In non-MCP mode, allow logging to stderr
+  console.error('[LOG]', ...args);
+};
+
+console.info = (...args: any[]) => {
+  // In MCP mode, redirect all info output to stderr to avoid corrupting JSON-RPC
+  if (process.env['IDX_MCP_LOG_LEVEL'] === 'error') {
+    // Don't output anything to avoid JSON pollution
+    return;
+  }
+  console.error('[INFO]', ...args);
+};
+
+console.warn = (...args: any[]) => {
+  // Always redirect warnings to stderr
+  console.error('[WARN]', ...args);
+};
+
+// Also suppress any potential stdout writes from dependencies
+const originalStdoutWrite = process.stdout.write;
+process.stdout.write = function(chunk: any, encoding?: any, callback?: any) {
+  // In MCP mode, suppress all stdout writes except for JSON-RPC responses
+  if (process.env['IDX_MCP_LOG_LEVEL'] === 'error') {
+    // Check if this looks like a JSON-RPC message (starts with { and contains "jsonrpc")
+    const chunkStr = chunk.toString();
+    if (chunkStr.trim().startsWith('{') && chunkStr.includes('"jsonrpc"')) {
+      // Allow JSON-RPC messages through
+      return originalStdoutWrite.call(this, chunk, encoding, callback);
+    } else {
+      // Suppress non-JSON-RPC output
+      if (callback) callback();
+      return true;
+    }
+  }
+  // In non-MCP mode, allow normal stdout writes
+  return originalStdoutWrite.call(this, chunk, encoding, callback);
 };
 
 import { createServer } from './server';
