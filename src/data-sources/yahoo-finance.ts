@@ -2,7 +2,7 @@
  * Yahoo Finance data source implementation
  */
 
-import yahooFinance from 'yahoo-finance2';
+import YahooFinance from 'yahoo-finance2';
 import { DataSource } from './base';
 import { config } from '../config';
 import { logger } from '../utils/logger';
@@ -18,10 +18,12 @@ import { DataSourcePriority } from '../types';
 
 export class YahooFinanceSource extends DataSource {
   private readonly idxSuffix = '.JK';
+  private readonly yahooFinance: InstanceType<typeof YahooFinance>;
 
   constructor() {
     const dsConfig = config.getDataSources().yahooFinance;
     super('yahoo_finance', DataSourcePriority.HIGH, dsConfig.timeout);
+    this.yahooFinance = new YahooFinance();
   }
 
   private getYahooTicker(ticker: string): string {
@@ -37,9 +39,9 @@ export class YahooFinanceSource extends DataSource {
   async getStockInfo(ticker: string): Promise<StockInfo | null> {
     return this.makeRequest(`getStockInfo(${ticker})`, async () => {
       const yahooTicker = this.getYahooTicker(ticker);
-      
+
       // Get quote data
-      const quote = await yahooFinance.quote(yahooTicker);
+      const quote = await this.yahooFinance.quote(yahooTicker);
       
       if (!quote || typeof quote.regularMarketPrice !== 'number') {
         throw new Error(`No quote data available for ${ticker}`);
@@ -71,7 +73,7 @@ export class YahooFinanceSource extends DataSource {
   async getMarketOverview(): Promise<MarketOverview | null> {
     return this.makeRequest('getMarketOverview', async () => {
       // Get IHSG (Jakarta Composite Index) data
-      const ihsgQuote = await yahooFinance.quote('^JKSE');
+      const ihsgQuote = await this.yahooFinance.quote('^JKSE');
       
       if (!ihsgQuote || typeof ihsgQuote.regularMarketPrice !== 'number') {
         throw new Error('No IHSG data available');
@@ -173,8 +175,8 @@ export class YahooFinanceSource extends DataSource {
       
       // Get historical data using start date
       logger.debug(`Getting historical data for ${yahooTicker}, period: ${period}`);
-      
-      const historical = await yahooFinance.historical(yahooTicker, {
+
+      const historical = await this.yahooFinance.historical(yahooTicker, {
         period1: this.getPeriodStartDate(period),
         interval: '1d'
       });

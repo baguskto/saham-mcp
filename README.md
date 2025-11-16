@@ -1,7 +1,7 @@
 # Baguskto Saham - MCP Server untuk Data Saham Indonesia
 
 ![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D20.0.0-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.3.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 

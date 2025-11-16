@@ -154,7 +154,7 @@ graph TD
 #### 5.2 Tech Stack (DELIVERED)
 
 ```yaml
-Language: TypeScript/Node.js 18+
+Language: TypeScript/Node.js 20+
 Framework: @modelcontextprotocol/sdk
 Dependencies:
   - yahoo-finance2: Live stock data

@@ -44,11 +44,11 @@
     "url": "https://github.com/baguskto/saham-mcp/issues"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "yahoo-finance2": "^2.11.3",
+    "yahoo-finance2": "^3.10.1",
     "axios": "^1.6.0",
     "cheerio": "^1.0.0-rc.12",
     "node-cache": "^5.1.2",

@@ -54,7 +54,7 @@ Untuk development lokal atau custom builds:
 ## Troubleshooting
 
 Jika Anda mendapat error module not found:
-1. Pastikan Node.js 18+ terinstall: `node --version`
+1. Pastikan Node.js 20+ terinstall: `node --version`
 2. Coba install package terlebih dahulu: `npm install -g @baguskto/saham`
 3. Periksa konektivitas internet untuk npm downloads
 4. Restart Claude Desktop setelah mengubah config

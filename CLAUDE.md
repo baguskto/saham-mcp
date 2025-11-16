@@ -8,9 +8,9 @@ This is **Baguskto Saham** - a production-ready MCP (Model Context Protocol) ser
 
 ## Architecture
 
-**Language**: TypeScript/Node.js 18+  
-**Framework**: @modelcontextprotocol/sdk  
-**Protocol**: MCP JSON-RPC 2.0 over stdio  
+**Language**: TypeScript/Node.js 20+
+**Framework**: @modelcontextprotocol/sdk
+**Protocol**: MCP JSON-RPC 2.0 over stdio
 **Package**: `@baguskto/saham`
 
 ### Components
@@ -43,7 +43,7 @@ This is **Baguskto Saham** - a production-ready MCP (Model Context Protocol) ser
 ## Development
 
 ### Requirements
-- Node.js 18+
+- Node.js 20+
 - TypeScript 5.3+
 
 ### Key Dependencies

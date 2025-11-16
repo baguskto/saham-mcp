@@ -5,6 +5,16 @@ All notable changes to Baguskto Saham will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- **Node.js v22 Compatibility**: Fixed `ERR_PACKAGE_PATH_NOT_EXPORTED` error by upgrading yahoo-finance2 from v2.11.3 to v3.10.1
+- Updated yahoo-finance2 API usage to use class-based instantiation pattern
+
+### Changed
+- **Minimum Node.js version**: Upgraded from Node.js 18+ to Node.js 20+ to support yahoo-finance2 v3.x
+- Updated all documentation to reflect Node.js 20+ requirement
+
 ## [1.0.5] - 2025-08-19
 
 ### Added
