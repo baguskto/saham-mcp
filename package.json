@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "yahoo-finance2": "^2.11.3",
+    "yahoo-finance2": "^3.0.0",
     "axios": "^1.6.0",
     "cheerio": "^1.0.0-rc.12",
     "node-cache": "^5.1.2",
